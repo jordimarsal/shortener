@@ -6,7 +6,6 @@ from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from sqlalchemy.pool import StaticPool
 
-from shortener_app.adapters.orm import Base
 from shortener_app.app_factory import create_app
 from shortener_app.config import Settings
 

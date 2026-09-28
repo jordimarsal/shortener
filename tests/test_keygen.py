@@ -14,7 +14,7 @@ def test_create_random_key_honors_custom_length():
 
 
 def test_create_random_key_only_uses_uppercase_letters_and_digits():
-    assert KEY_ALPHABET == string.ascii_uppercase + string.digits
+    assert string.ascii_uppercase + string.digits == KEY_ALPHABET
     key = create_random_key(length=64)
     assert all(char in KEY_ALPHABET for char in key)
 

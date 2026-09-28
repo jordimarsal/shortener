@@ -6,7 +6,7 @@ from shortener_app.domain.url import SecretKey, ShortUrl, UrlKey
 from shortener_app.ports.url_repository import UrlRepository
 
 
-class FakeUrlRepository:
+class FakeUrlRepository(UrlRepository):
     """In-memory implementation of the UrlRepository port for use case tests."""
 
     def __init__(self) -> None:

@@ -59,12 +59,13 @@ http://127.0.0.1:8000
 http://127.0.0.1:8000/docs
 http://127.0.0.1:8000/redoc
 
-## Tests, types:
+## Tests, types, lint:
 
 ```sh
 $ source venv/bin/activate (if not activated)
 $ python -m pytest tests/ -v
 $ python -m mypy   # strict mode, configured in pyproject.toml
+$ python -m ruff check .   # lint (import order, bugbear, simplify, ...)
 ```
 
 ## Example:

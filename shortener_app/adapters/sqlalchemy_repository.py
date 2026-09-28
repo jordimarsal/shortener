@@ -32,7 +32,7 @@ async def _find_active(session: AsyncSession, criterion: ColumnElement[bool]) ->
 # region Repository
 
 
-class SqlAlchemyUrlRepository:
+class SqlAlchemyUrlRepository(UrlRepository):
     """SQLAlchemy adapter of the UrlRepository port.
 
     Each operation runs in its own session, keeping use cases free of

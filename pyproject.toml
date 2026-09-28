@@ -1,10 +1,6 @@
 [tool.black]
 line-length = 120
 
-[tool.isort]
-profile = "black"
-line_length = 120
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
@@ -17,3 +13,19 @@ files = ["shortener_app"]
 [[tool.mypy.overrides]]
 module = "validators.*"
 ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+# E/W pycodestyle, F pyflakes, I import order (replaces isort), UP pyupgrade,
+# B bugbear, C4 comprehensions, SIM simplify, RUF ruff-specific
+select = ["E", "W", "F", "I", "UP", "B", "C4", "SIM", "RUF"]
+ignore = [
+    "E501", # black owns line length; it cannot split long strings/URLs
+]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI injects dependencies through argument defaults; B008 must not flag them
+extend-immutable-calls = ["fastapi.Depends"]

@@ -8,7 +8,7 @@ asyncio_mode = "auto"
 [tool.mypy]
 strict = true
 python_version = "3.12"
-files = ["shortener_app"]
+files = ["shortener_app", "tests"]
 
 [[tool.mypy.overrides]]
 module = "validators.*"

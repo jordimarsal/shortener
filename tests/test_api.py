@@ -3,13 +3,13 @@
 from fastapi.testclient import TestClient
 
 
-def test_root_welcomes(client: TestClient):
+def test_root_welcomes(client: TestClient) -> None:
     response = client.get("/")
     assert response.status_code == 200
     assert "URL shortener" in response.text
 
 
-def test_create_forward_and_delete_flow(client: TestClient):
+def test_create_forward_and_delete_flow(client: TestClient) -> None:
     created = client.post("/url", json={"target_url": "https://www.example.com/"})
     assert created.status_code == 200, created.text
     data = created.json()
@@ -33,27 +33,27 @@ def test_create_forward_and_delete_flow(client: TestClient):
     assert gone.status_code == 404
 
 
-def test_create_url_rejects_invalid_target_with_400(client: TestClient):
+def test_create_url_rejects_invalid_target_with_400(client: TestClient) -> None:
     rejected = client.post("/url", json={"target_url": "not a url at all"})
     assert rejected.status_code == 400
     assert rejected.json()["detail"] == "Your provided URL is not valid"
 
 
-def test_forward_unknown_key_returns_404(client: TestClient):
+def test_forward_unknown_key_returns_404(client: TestClient) -> None:
     missing = client.get("/ZZZZZ", follow_redirects=False)
     assert missing.status_code == 404
     assert "doesn't exist" in missing.json()["detail"]
 
 
-def test_admin_info_unknown_secret_returns_404(client: TestClient):
+def test_admin_info_unknown_secret_returns_404(client: TestClient) -> None:
     assert client.get("/admin/NOPE_MISSING").status_code == 404
 
 
-def test_delete_unknown_secret_returns_404(client: TestClient):
+def test_delete_unknown_secret_returns_404(client: TestClient) -> None:
     assert client.delete("/admin/NOPE_MISSING").status_code == 404
 
 
-def test_second_delete_of_same_url_returns_404(client: TestClient):
+def test_second_delete_of_same_url_returns_404(client: TestClient) -> None:
     created = client.post("/url", json={"target_url": "https://www.example.com/"})
     admin_key = created.json()["admin_url"].rsplit("/", 1)[-1]
 

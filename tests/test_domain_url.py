@@ -14,26 +14,26 @@ from shortener_app.domain.url import (
 )
 
 
-def test_validate_target_url_accepts_https_urls():
+def test_validate_target_url_accepts_https_urls() -> None:
     validate_target_url("https://www.example.com/")  # does not raise
 
 
-def test_validate_target_url_rejects_plain_text():
+def test_validate_target_url_rejects_plain_text() -> None:
     with pytest.raises(InvalidTargetUrl):
         validate_target_url("not a url at all")
 
 
-def test_validate_target_url_error_carries_the_offending_value():
+def test_validate_target_url_error_carries_the_offending_value() -> None:
     with pytest.raises(InvalidTargetUrl) as error:
         validate_target_url("nope")
     assert error.value.target_url == "nope"
 
 
-def test_compose_secret_key_joins_key_and_suffix():
+def test_compose_secret_key_joins_key_and_suffix() -> None:
     assert compose_secret_key(UrlKey("ABC12"), "XYZ89") == f"ABC12{SECRET_KEY_SEPARATOR}XYZ89"
 
 
-def test_build_short_url_starts_active_with_zero_clicks():
+def test_build_short_url_starts_active_with_zero_clicks() -> None:
     url = build_short_url("https://www.example.com/", UrlKey("ABC12"))
     assert url.is_active is True
     assert url.clicks == 0
@@ -42,7 +42,8 @@ def test_build_short_url_starts_active_with_zero_clicks():
     assert url.secret_key.startswith("ABC12_")
 
 
-def test_short_url_is_frozen():
+def test_short_url_is_frozen() -> None:
     url = build_short_url("https://www.example.com/", UrlKey("ABC12"))
     with pytest.raises(dataclasses.FrozenInstanceError):
-        url.clicks = 5
+        # deliberate violation: proves the dataclass is frozen at runtime
+        url.clicks = 5  # type: ignore[misc]

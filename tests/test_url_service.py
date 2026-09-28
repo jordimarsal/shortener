@@ -13,6 +13,7 @@ from shortener_app.domain.url import (
     MAX_KEY_GENERATION_ATTEMPTS,
     SECRET_KEY_SEPARATOR,
     SECRET_KEY_SUFFIX_LENGTH,
+    SecretKey,
     UrlKey,
     build_short_url,
 )
@@ -26,7 +27,7 @@ def repo() -> FakeUrlRepository:
 # region shorten_url
 
 
-async def test_shorten_url_saves_active_url_with_composed_secret(repo: FakeUrlRepository):
+async def test_shorten_url_saves_active_url_with_composed_secret(repo: FakeUrlRepository) -> None:
     url = await url_service.shorten_url(repo, "https://www.example.com/")
 
     assert repo.saved == [url]
@@ -37,13 +38,15 @@ async def test_shorten_url_saves_active_url_with_composed_secret(repo: FakeUrlRe
     assert len(url.secret_key) == len(secret_prefix) + SECRET_KEY_SUFFIX_LENGTH
 
 
-async def test_shorten_url_rejects_invalid_target_without_saving(repo: FakeUrlRepository):
+async def test_shorten_url_rejects_invalid_target_without_saving(repo: FakeUrlRepository) -> None:
     with pytest.raises(InvalidTargetUrl):
         await url_service.shorten_url(repo, "not a url at all")
     assert repo.saved == []
 
 
-async def test_shorten_url_regenerates_key_on_collision(monkeypatch: pytest.MonkeyPatch, repo: FakeUrlRepository):
+async def test_shorten_url_regenerates_key_on_collision(
+    monkeypatch: pytest.MonkeyPatch, repo: FakeUrlRepository
+) -> None:
     seeded = build_short_url("https://taken.example/", UrlKey("TAKEN"))
     repo._urls[seeded.key] = seeded
     generated = iter([UrlKey("TAKEN"), UrlKey("FRESH")])
@@ -56,7 +59,7 @@ async def test_shorten_url_regenerates_key_on_collision(monkeypatch: pytest.Monk
 
 async def test_shorten_url_raises_after_max_attempts_without_saving(
     monkeypatch: pytest.MonkeyPatch, repo: FakeUrlRepository
-):
+) -> None:
     seeded = build_short_url("https://taken.example/", UrlKey("TAKEN"))
     repo._urls[seeded.key] = seeded
     monkeypatch.setattr(url_service, "generate_url_key", lambda: UrlKey("TAKEN"))
@@ -74,7 +77,7 @@ async def test_shorten_url_raises_after_max_attempts_without_saving(
 # region resolve_url
 
 
-async def test_resolve_url_returns_url_and_records_click(repo: FakeUrlRepository):
+async def test_resolve_url_returns_url_and_records_click(repo: FakeUrlRepository) -> None:
     url = await url_service.shorten_url(repo, "https://www.example.com/")
 
     resolved = await url_service.resolve_url(repo, url.key)
@@ -85,12 +88,12 @@ async def test_resolve_url_returns_url_and_records_click(repo: FakeUrlRepository
     assert stored.clicks == 1
 
 
-async def test_resolve_url_raises_for_unknown_key(repo: FakeUrlRepository):
+async def test_resolve_url_raises_for_unknown_key(repo: FakeUrlRepository) -> None:
     with pytest.raises(UrlNotFound):
         await url_service.resolve_url(repo, UrlKey("NOPE1"))
 
 
-async def test_resolve_url_raises_for_deactivated_url(repo: FakeUrlRepository):
+async def test_resolve_url_raises_for_deactivated_url(repo: FakeUrlRepository) -> None:
     url = await url_service.shorten_url(repo, "https://www.example.com/")
     await url_service.deactivate_url(repo, url.secret_key)
 
@@ -104,7 +107,7 @@ async def test_resolve_url_raises_for_deactivated_url(repo: FakeUrlRepository):
 # region get_url_info
 
 
-async def test_get_url_info_returns_url_for_secret_key(repo: FakeUrlRepository):
+async def test_get_url_info_returns_url_for_secret_key(repo: FakeUrlRepository) -> None:
     url = await url_service.shorten_url(repo, "https://www.example.com/")
 
     found = await url_service.get_url_info(repo, url.secret_key)
@@ -112,9 +115,9 @@ async def test_get_url_info_returns_url_for_secret_key(repo: FakeUrlRepository):
     assert found.key == url.key
 
 
-async def test_get_url_info_raises_for_unknown_secret_key(repo: FakeUrlRepository):
+async def test_get_url_info_raises_for_unknown_secret_key(repo: FakeUrlRepository) -> None:
     with pytest.raises(UrlNotFound):
-        await url_service.get_url_info(repo, "NOPE1_MISSING")
+        await url_service.get_url_info(repo, SecretKey("NOPE1_MISSING"))
 
 
 # endregion
@@ -123,7 +126,7 @@ async def test_get_url_info_raises_for_unknown_secret_key(repo: FakeUrlRepositor
 # region deactivate_url
 
 
-async def test_deactivate_url_marks_url_inactive(repo: FakeUrlRepository):
+async def test_deactivate_url_marks_url_inactive(repo: FakeUrlRepository) -> None:
     url = await url_service.shorten_url(repo, "https://www.example.com/")
 
     deactivated = await url_service.deactivate_url(repo, url.secret_key)
@@ -132,9 +135,9 @@ async def test_deactivate_url_marks_url_inactive(repo: FakeUrlRepository):
     assert await repo.find_by_secret_key(url.secret_key) is None
 
 
-async def test_deactivate_url_raises_for_unknown_secret_key(repo: FakeUrlRepository):
+async def test_deactivate_url_raises_for_unknown_secret_key(repo: FakeUrlRepository) -> None:
     with pytest.raises(UrlNotFound):
-        await url_service.deactivate_url(repo, "NOPE1_MISSING")
+        await url_service.deactivate_url(repo, SecretKey("NOPE1_MISSING"))
 
 
 # endregion

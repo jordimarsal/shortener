@@ -8,7 +8,6 @@ from ..domain.url import SecretKey, ShortUrl, UrlKey
 from ..ports.url_repository import UrlRepository
 from .orm import UrlRecord
 
-
 # region Mapping helpers
 
 
@@ -23,9 +22,7 @@ def _to_domain(record: UrlRecord) -> ShortUrl:
 
 
 async def _find_active(session: AsyncSession, criterion: ColumnElement[bool]) -> UrlRecord | None:
-    result = await session.execute(
-        select(UrlRecord).where(criterion, UrlRecord.is_active.is_(True))
-    )
+    result = await session.execute(select(UrlRecord).where(criterion, UrlRecord.is_active.is_(True)))
     return result.scalars().first()
 
 

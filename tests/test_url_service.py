@@ -1,6 +1,7 @@
 # tests/test_url_service.py
 
 import pytest
+from fake_url_repository import FakeUrlRepository
 
 from shortener_app.application import url_service
 from shortener_app.domain.errors import (
@@ -15,7 +16,6 @@ from shortener_app.domain.url import (
     UrlKey,
     build_short_url,
 )
-from fake_url_repository import FakeUrlRepository
 
 
 @pytest.fixture
@@ -43,9 +43,7 @@ async def test_shorten_url_rejects_invalid_target_without_saving(repo: FakeUrlRe
     assert repo.saved == []
 
 
-async def test_shorten_url_regenerates_key_on_collision(
-    monkeypatch: pytest.MonkeyPatch, repo: FakeUrlRepository
-):
+async def test_shorten_url_regenerates_key_on_collision(monkeypatch: pytest.MonkeyPatch, repo: FakeUrlRepository):
     seeded = build_short_url("https://taken.example/", UrlKey("TAKEN"))
     repo._urls[seeded.key] = seeded
     generated = iter([UrlKey("TAKEN"), UrlKey("FRESH")])

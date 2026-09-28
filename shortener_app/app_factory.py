@@ -56,7 +56,5 @@ def create_app(settings: Settings, engine: AsyncEngine | None = None) -> FastAPI
     application.state.url_repository = SqlAlchemyUrlRepository(build_session_factory(wired_engine))
     install_error_handlers(application)
     application.include_router(router)
-    logger.info(
-        "Created application (env=%s, base_url=%s)", settings.env_name, settings.base_url
-    )
+    logger.info("Created application (env=%s, base_url=%s)", settings.env_name, settings.base_url)
     return application

@@ -8,7 +8,7 @@ from ...config import Settings
 from ...domain.url import SecretKey, UrlKey
 from ...ports.url_repository import UrlRepository
 from .deps import get_app_settings, get_url_repository
-from .schemas import DeleteUrlResponse, ShortUrlResponse, ShortenUrlRequest, to_response
+from .schemas import DeleteUrlResponse, ShortenUrlRequest, ShortUrlResponse, to_response
 
 router = APIRouter()
 
@@ -32,9 +32,7 @@ async def create_url(
 
 
 @router.get("/{url_key}")
-async def forward_to_target_url(
-    url_key: str, repo: UrlRepository = Depends(get_url_repository)
-) -> RedirectResponse:
+async def forward_to_target_url(url_key: str, repo: UrlRepository = Depends(get_url_repository)) -> RedirectResponse:
     url = await url_service.resolve_url(repo, UrlKey(url_key))
     return RedirectResponse(url.target_url)
 
@@ -54,9 +52,7 @@ async def get_url_info(
 
 
 @router.delete("/admin/{secret_key}")
-async def delete_url(
-    secret_key: str, repo: UrlRepository = Depends(get_url_repository)
-) -> DeleteUrlResponse:
+async def delete_url(secret_key: str, repo: UrlRepository = Depends(get_url_repository)) -> DeleteUrlResponse:
     url = await url_service.deactivate_url(repo, SecretKey(secret_key))
     return DeleteUrlResponse(detail=f"Successfully deleted shortened URL for '{url.target_url}'")
 

@@ -2,8 +2,8 @@
 fastapi==0.141.1
 # ASGI Asynchronous Server Gateway Interface. Web server
 uvicorn==0.54.0
-# ORM Object Relational Mapper (async engine via aiosqlite)
-sqlalchemy==2.1.1
+# ORM Object Relational Mapper ([asyncio] extra pulls greenlet, required by AsyncSession)
+sqlalchemy[asyncio]==2.1.1
 # async driver for SQLite
 aiosqlite==0.22.1
 # pydantic settings management (env vars + .env file)

@@ -1,9 +1,14 @@
 # shortener_app/database.py
 
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+from sqlalchemy.orm import DeclarativeBase
 
-from .config import get_settings
+from .config import Settings, get_settings
 
 
 def to_async_url(url: str) -> str:
@@ -13,11 +18,20 @@ def to_async_url(url: str) -> str:
     return url
 
 
-# aiosqlite serves each query from its own thread, so the event loop never blocks.
-engine = create_async_engine(to_async_url(get_settings().db_url), echo=False)
-# factory of async database sessions
-SessionLocal = sessionmaker(
-    bind=engine, class_=AsyncSession, expire_on_commit=False, autoflush=False
-)
-# connects the models to the database
-Base = declarative_base()
+def build_engine(settings: Settings) -> AsyncEngine:
+    # aiosqlite serves each query from its own thread, so the event loop never blocks.
+    return create_async_engine(to_async_url(settings.db_url), echo=False)
+
+
+def build_session_factory(engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
+    # factory of async database sessions
+    return async_sessionmaker(bind=engine, expire_on_commit=False, autoflush=False)
+
+
+class Base(DeclarativeBase):
+    """Connects the models to the database."""
+
+
+# transitional module-level wiring: replaced by the app factory in phase 2
+engine = build_engine(get_settings())
+SessionLocal = build_session_factory(engine)

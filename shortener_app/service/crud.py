@@ -1,10 +1,13 @@
 # shortener_app/service/crud.py
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..models import models, schemas
 from ..utils import keygen
+
+
+# region Create
 
 
 async def create_db_url(db: AsyncSession, url: schemas.URLBase) -> models.URL:
@@ -17,18 +20,24 @@ async def create_db_url(db: AsyncSession, url: schemas.URLBase) -> models.URL:
     return db_url
 
 
-async def get_db_url_by_key(db: AsyncSession, url_key: str) -> models.URL | None:
-    result = await db.execute(
-        select(models.URL).where(models.URL.key == url_key, models.URL.is_active)
-    )
-    return result.scalars().first()
-
-
 async def create_unique_random_key(db: AsyncSession) -> str:
     key = keygen.create_random_key()
     while await get_db_url_by_key(db, key):
         key = keygen.create_random_key()
     return key
+
+
+# endregion
+
+
+# region Query
+
+
+async def get_db_url_by_key(db: AsyncSession, url_key: str) -> models.URL | None:
+    result = await db.execute(
+        select(models.URL).where(models.URL.key == url_key, models.URL.is_active)
+    )
+    return result.scalars().first()
 
 
 async def get_db_url_by_secret_key(db: AsyncSession, secret_key: str) -> models.URL | None:
@@ -40,11 +49,22 @@ async def get_db_url_by_secret_key(db: AsyncSession, secret_key: str) -> models.
     return result.scalars().first()
 
 
-async def update_db_clicks(db: AsyncSession, db_url: models.URL) -> models.URL:
-    db_url.clicks += 1
+# endregion
+
+
+# region Update
+
+
+async def record_click(db: AsyncSession, url_key: str) -> None:
+    # Atomic increment: a read-modify-write on the ORM object loses counts
+    # when two requests race for the same key.
+    statement = (
+        update(models.URL)
+        .where(models.URL.key == url_key, models.URL.is_active)
+        .values(clicks=models.URL.clicks + 1)
+    )
+    await db.execute(statement)
     await db.commit()
-    await db.refresh(db_url)
-    return db_url
 
 
 async def deactivate_db_url_by_secret_key(db: AsyncSession, secret_key: str) -> models.URL | None:
@@ -54,3 +74,6 @@ async def deactivate_db_url_by_secret_key(db: AsyncSession, secret_key: str) -> 
         await db.commit()
         await db.refresh(db_url)
     return db_url
+
+
+# endregion

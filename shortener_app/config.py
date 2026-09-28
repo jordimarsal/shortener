@@ -1,21 +1,21 @@
 # shortener_app/config.py
 
-from functools import lru_cache
+import logging
 
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env")
+
     env_name: str = "Local"
     base_url: str = "http://localhost:8000"
     db_url: str = "sqlite:///./shortener.db"
 
-    class Config:
-        env_file = ".env"
 
-
-@lru_cache
 def get_settings() -> Settings:
     settings = Settings()
-    print(f"Loading settings for: {settings.env_name}")
+    logger.info("Loading settings for: %s", settings.env_name)
     return settings

@@ -4,3 +4,7 @@
 **/*.pyd
 **/venv
 venv
+.env
+*.db
+.pytest_cache/
+.mypy_cache/

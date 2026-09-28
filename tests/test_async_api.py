@@ -50,7 +50,7 @@ def test_create_forward_and_delete_flow():
         key = data["url"].rsplit("/", 1)[-1]
         admin_key = data["admin_url"].rsplit("/", 1)[-1]
 
-        fwd = client.get(f"/{key}", allow_redirects=False)
+        fwd = client.get(f"/{key}", follow_redirects=False)
         assert fwd.status_code in (301, 302, 303, 307)
 
         info = client.get(f"/admin/{admin_key}")
@@ -60,5 +60,5 @@ def test_create_forward_and_delete_flow():
         deleted = client.delete(f"/admin/{admin_key}")
         assert deleted.status_code == 200
 
-        gone = client.get(f"/{key}", allow_redirects=False)
+        gone = client.get(f"/{key}", follow_redirects=False)
         assert gone.status_code == 404

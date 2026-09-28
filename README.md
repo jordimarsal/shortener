@@ -1,5 +1,7 @@
 # Shortener
 
+[![CI](https://github.com/jordimarsal/shortener/actions/workflows/ci.yml/badge.svg)](https://github.com/jordimarsal/shortener/actions/workflows/ci.yml)
+
 Async URL shortener API with a hexagonal-lite architecture: FastAPI endpoints
 (`async def`) over SQLAlchemy `AsyncSession` on `aiosqlite`, so database I/O
 never blocks the event loop.

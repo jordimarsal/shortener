@@ -4,6 +4,8 @@ Async URL shortener API with a hexagonal-lite architecture: FastAPI endpoints
 (`async def`) over SQLAlchemy `AsyncSession` on `aiosqlite`, so database I/O
 never blocks the event loop.
 
+**Requires Python 3.12+.**
+
 ## Architecture
 
 ```

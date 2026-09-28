@@ -4,6 +4,9 @@ line-length = 120
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+# repo root on sys.path so `pytest` (console script, no cwd insertion)
+# resolves the shortener_app package the same way `python -m pytest` does
+pythonpath = ["."]
 
 [tool.mypy]
 strict = true

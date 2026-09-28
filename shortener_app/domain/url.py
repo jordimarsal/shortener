@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from typing import NewType
+from urllib.parse import urlparse
 
 import validators
 
@@ -14,6 +15,8 @@ SecretKey = NewType("SecretKey", str)
 SECRET_KEY_SEPARATOR = "_"
 SECRET_KEY_SUFFIX_LENGTH = 8
 MAX_KEY_GENERATION_ATTEMPTS = 8
+ALLOWED_TARGET_SCHEMES = frozenset({"http", "https"})
+MAX_TARGET_URL_LENGTH = 2048
 
 
 @dataclass(frozen=True)
@@ -28,7 +31,12 @@ class ShortUrl:
 
 
 def validate_target_url(target_url: str) -> None:
+    # Single choke point for target URL rules: length, syntax, then scheme.
+    if len(target_url) > MAX_TARGET_URL_LENGTH:
+        raise InvalidTargetUrl(target_url)
     if not validators.url(target_url):
+        raise InvalidTargetUrl(target_url)
+    if urlparse(target_url).scheme.lower() not in ALLOWED_TARGET_SCHEMES:
         raise InvalidTargetUrl(target_url)
 
 

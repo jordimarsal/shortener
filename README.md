@@ -68,6 +68,28 @@ $ python -m mypy   # strict mode, configured in pyproject.toml
 $ python -m ruff check .   # lint (import order, bugbear, simplify, ...)
 ```
 
+## Security notes
+
+Target URL rules are enforced in the domain layer (`domain/url.py`), the single
+choke point every stored URL passes through:
+
+- only `http` and `https` schemes (case-insensitive)
+- maximum length of 2048 characters
+- syntactically valid URL (via the `validators` library)
+
+Violations return `400` with detail `Your provided URL is not valid`.
+
+Operational considerations when hosting (outside this repo's code):
+
+- admin URLs are bearer capabilities and appear in server access logs
+  (`uvicorn` logs the full request line by default), so treat log access
+  and retention accordingly
+- `/docs`, `/redoc` and `/openapi.json` are enabled by default; disable them
+  via `FastAPI(docs_url=None, redoc_url=None, openapi_url=None)` if the API
+  surface should not be self-documented publicly
+- there is no authentication or rate limiting by design; put throttling at
+  the edge (reverse proxy) if the service is exposed publicly
+
 ## Example:
 Post:
 ```sh

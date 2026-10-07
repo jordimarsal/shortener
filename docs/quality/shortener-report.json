@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-07T15:05:54+00:00",
+ "generatedAt": "2026-10-07T16:01:49+00:00",
  "server": "https://sonar.viatgecio.test",
  "project": {
   "key": "jordimarsal:shortener",
@@ -11,175 +11,64 @@
   "error": null,
   "status": "OK",
   "ignoredConditions": false,
-  "period": null,
+  "period": {
+   "mode": "PREVIOUS_VERSION",
+   "date": "2026-10-07T15:05:48+0000"
+  },
   "caycStatus": "non-compliant",
-  "conditions": []
+  "conditions": [
+   {
+    "metric": "new_duplicated_lines_density",
+    "comparator": "GT",
+    "threshold": "3",
+    "actual": "0.0",
+    "status": "OK"
+   },
+   {
+    "metric": "new_violations",
+    "comparator": "GT",
+    "threshold": "0",
+    "actual": "0",
+    "status": "OK"
+   }
+  ]
  },
  "measures": {
-  "complexity": 106,
+  "complexity": 95,
   "duplicated_lines_density": 0.0,
   "duplicated_lines": 0,
-  "functions": 86,
-  "classes": 14,
-  "statements": 452,
-  "sqale_index": 39,
+  "functions": 52,
+  "new_vulnerabilities": 0,
+  "classes": 13,
+  "new_coverage": 9.2,
+  "statements": 362,
+  "sqale_index": 0,
   "sqale_rating": 1.0,
   "bugs": 0,
-  "ncloc": 553,
-  "coverage": 0.0,
+  "new_violations": 0,
+  "ncloc": 630,
+  "new_maintainability_rating": 1.0,
+  "coverage": 68.1,
   "reliability_rating": 1.0,
-  "code_smells": 9,
+  "code_smells": 0,
   "security_rating": 1.0,
-  "violations": 9,
-  "comment_lines_density": 11.8,
+  "violations": 0,
+  "comment_lines_density": 10.9,
   "security_hotspots": 0,
-  "comment_lines": 74,
-  "cognitive_complexity": 22,
-  "files": 26,
-  "vulnerabilities": 0
+  "new_bugs": 0,
+  "new_code_smells": 0,
+  "new_security_hotspots": 0,
+  "comment_lines": 77,
+  "cognitive_complexity": 50,
+  "files": 22,
+  "vulnerabilities": 0,
+  "new_duplicated_lines_density": 0.0
  },
  "measuresError": null,
  "issues": {
-  "total": 9,
-  "returned": 9,
-  "items": [
-   {
-    "rule": "python:S5778",
-    "severity": "MAJOR",
-    "type": "CODE_SMELL",
-    "file": "tests/test_url_service.py",
-    "line": 92,
-    "message": "Refactor this exception test to have only one invocation possibly throwing an exception.",
-    "effort": "5min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T16:28:10+0000",
-    "tags": [
-     "tests",
-     "pytest",
-     "unittest"
-    ]
-   },
-   {
-    "rule": "python:S5778",
-    "severity": "MAJOR",
-    "type": "CODE_SMELL",
-    "file": "tests/test_url_service.py",
-    "line": 119,
-    "message": "Refactor this exception test to have only one invocation possibly throwing an exception.",
-    "effort": "5min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T17:23:04+0000",
-    "tags": [
-     "tests",
-     "pytest",
-     "unittest"
-    ]
-   },
-   {
-    "rule": "python:S9073",
-    "severity": "MAJOR",
-    "type": "CODE_SMELL",
-    "file": "tests/test_url_service.py",
-    "line": 134,
-    "message": "Split this composite assertion into separate assertions.",
-    "effort": "5min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T16:28:10+0000",
-    "tags": [
-     "pytest"
-    ]
-   },
-   {
-    "rule": "python:S5778",
-    "severity": "MAJOR",
-    "type": "CODE_SMELL",
-    "file": "tests/test_url_service.py",
-    "line": 139,
-    "message": "Refactor this exception test to have only one invocation possibly throwing an exception.",
-    "effort": "5min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T17:23:04+0000",
-    "tags": [
-     "tests",
-     "pytest",
-     "unittest"
-    ]
-   },
-   {
-    "rule": "python:S7503",
-    "severity": "MINOR",
-    "type": "CODE_SMELL",
-    "file": "shortener_app/adapters/api/errors.py",
-    "line": 20,
-    "message": "Use asynchronous features in this function or remove the `async` keyword.",
-    "effort": "5min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T16:25:51+0000",
-    "tags": [
-     "async"
-    ]
-   },
-   {
-    "rule": "python:S7503",
-    "severity": "MINOR",
-    "type": "CODE_SMELL",
-    "file": "shortener_app/adapters/api/errors.py",
-    "line": 26,
-    "message": "Use asynchronous features in this function or remove the `async` keyword.",
-    "effort": "5min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T16:25:51+0000",
-    "tags": [
-     "async"
-    ]
-   },
-   {
-    "rule": "python:S7503",
-    "severity": "MINOR",
-    "type": "CODE_SMELL",
-    "file": "shortener_app/adapters/api/errors.py",
-    "line": 31,
-    "message": "Use asynchronous features in this function or remove the `async` keyword.",
-    "effort": "5min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T16:25:51+0000",
-    "tags": [
-     "async"
-    ]
-   },
-   {
-    "rule": "python:S8409",
-    "severity": "MINOR",
-    "type": "CODE_SMELL",
-    "file": "shortener_app/adapters/api/routes.py",
-    "line": 24,
-    "message": "Remove this redundant \"response_model\" parameter; it duplicates the return type annotation.",
-    "effort": "2min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T16:25:51+0000",
-    "tags": [
-     "fastapi",
-     "api",
-     "redundant"
-    ]
-   },
-   {
-    "rule": "python:S8409",
-    "severity": "MINOR",
-    "type": "CODE_SMELL",
-    "file": "shortener_app/adapters/api/routes.py",
-    "line": 43,
-    "message": "Remove this redundant \"response_model\" parameter; it duplicates the return type annotation.",
-    "effort": "2min",
-    "status": "OPEN",
-    "creationDate": "2026-09-28T16:25:51+0000",
-    "tags": [
-     "fastapi",
-     "api",
-     "redundant"
-    ]
-   }
-  ]
+  "total": 0,
+  "returned": 0,
+  "items": []
  },
  "issuesError": null,
  "securityHotspots": {

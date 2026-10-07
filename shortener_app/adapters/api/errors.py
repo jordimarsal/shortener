@@ -17,18 +17,18 @@ def install_error_handlers(app: FastAPI) -> None:
     app.add_exception_handler(KeyGenerationExhaustedError, _handle_key_generation_exhausted)
 
 
-async def _handle_invalid_target_url(_: Request, error: Exception) -> JSONResponse:
+def _handle_invalid_target_url(_: Request, error: Exception) -> JSONResponse:
     rejected = cast(InvalidTargetUrl, error)
     logger.warning("Rejected invalid target URL (%s chars)", len(rejected.target_url))
     return JSONResponse(status_code=400, content={"detail": "Your provided URL is not valid"})
 
 
-async def _handle_url_not_found(request: Request, __: Exception) -> JSONResponse:
+def _handle_url_not_found(request: Request, __: Exception) -> JSONResponse:
     logger.warning("Short URL not found: %s", request.url)
     return JSONResponse(status_code=404, content={"detail": f"URL '{request.url}' doesn't exist"})
 
 
-async def _handle_key_generation_exhausted(_: Request, error: Exception) -> JSONResponse:
+def _handle_key_generation_exhausted(_: Request, error: Exception) -> JSONResponse:
     exhausted = cast(KeyGenerationExhaustedError, error)
     logger.error("Key generation exhausted after %s attempts", exhausted.attempts)
     return JSONResponse(

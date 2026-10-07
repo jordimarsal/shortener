@@ -151,10 +151,7 @@ def render_page(report: dict[str, Any], rows: list[tuple[str, str, str]]) -> str
         for name, letter in ratings
     )
     row_html = (
-        "\n        ".join(
-            f"<tr><td>{name}</td><td>{lines}</td><td>{branch}</td></tr>"
-            for name, lines, branch in rows
-        )
+        "\n        ".join(f"<tr><td>{name}</td><td>{lines}</td><td>{branch}</td></tr>" for name, lines, branch in rows)
         or '<tr><td colspan="3">run <code>uv run pytest -q tests</code> first</td></tr>'
     )
     gate_ok = gate.get("status") == "OK"

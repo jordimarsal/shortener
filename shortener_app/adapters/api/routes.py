@@ -21,7 +21,7 @@ async def read_root() -> str:
     return "Welcome to the URL shortener API :)"
 
 
-@router.post("/url", response_model=ShortUrlResponse)
+@router.post("/url")
 async def create_url(
     request: ShortenUrlRequest,
     repo: UrlRepository = Depends(get_url_repository),
@@ -40,7 +40,6 @@ async def forward_to_target_url(url_key: str, repo: UrlRepository = Depends(get_
 @router.get(
     "/admin/{secret_key}",
     name="administration info",
-    response_model=ShortUrlResponse,
 )
 async def get_url_info(
     secret_key: str,

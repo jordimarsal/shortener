@@ -1,10 +1,26 @@
 # Shortener
 
 [![CI](https://github.com/jordimarsal/shortener/actions/workflows/ci.yml/badge.svg)](https://github.com/jordimarsal/shortener/actions/workflows/ci.yml)
+[![Quality Gate](docs/images/badge-quality-gate.svg)](https://jordimarsal.github.io/shortener/)
+[![Coverage](docs/images/badge-coverage.svg)](https://jordimarsal.github.io/shortener/)
+[![Code Smells](docs/images/badge-code-smells.svg)](https://jordimarsal.github.io/shortener/)
 
 Async URL shortener API with a hexagonal-lite architecture: FastAPI endpoints
 (`async def`) over SQLAlchemy `AsyncSession` on `aiosqlite`, so database I/O
 never blocks the event loop.
+
+## Quality
+
+Analyzed with SonarQube behind a custom quality gate ("Viatgecio Way") — current
+metrics, per-package coverage and the raw `shortener-report.json` live on the
+[quality page](https://jordimarsal.github.io/shortener/), published on GitHub
+Pages. The badges above are static SVGs rendered from the latest scan report; the
+Sonar server itself is LAN-only, so dynamic badges would not resolve outside the
+homelab. After each scan, refresh the published assets with:
+
+```bash
+python3 scripts/sonar-quality.py   # reads ../shortener-report.json, renders page + badges
+```
 
 **Requires Python 3.12+.**
 

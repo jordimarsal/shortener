@@ -89,8 +89,9 @@ async def test_resolve_url_returns_url_and_records_click(repo: FakeUrlRepository
 
 
 async def test_resolve_url_raises_for_unknown_key(repo: FakeUrlRepository) -> None:
+    missing_key = UrlKey("NOPE1")
     with pytest.raises(UrlNotFound):
-        await url_service.resolve_url(repo, UrlKey("NOPE1"))
+        await url_service.resolve_url(repo, missing_key)
 
 
 async def test_resolve_url_raises_for_deactivated_url(repo: FakeUrlRepository) -> None:
@@ -116,8 +117,9 @@ async def test_get_url_info_returns_url_for_secret_key(repo: FakeUrlRepository) 
 
 
 async def test_get_url_info_raises_for_unknown_secret_key(repo: FakeUrlRepository) -> None:
+    missing_key = SecretKey("NOPE1_MISSING")
     with pytest.raises(UrlNotFound):
-        await url_service.get_url_info(repo, SecretKey("NOPE1_MISSING"))
+        await url_service.get_url_info(repo, missing_key)
 
 
 # endregion
@@ -131,13 +133,15 @@ async def test_deactivate_url_marks_url_inactive(repo: FakeUrlRepository) -> Non
 
     deactivated = await url_service.deactivate_url(repo, url.secret_key)
 
-    assert deactivated is not None and deactivated.is_active is False
+    assert deactivated is not None
+    assert deactivated.is_active is False
     assert await repo.find_by_secret_key(url.secret_key) is None
 
 
 async def test_deactivate_url_raises_for_unknown_secret_key(repo: FakeUrlRepository) -> None:
+    missing_key = SecretKey("NOPE1_MISSING")
     with pytest.raises(UrlNotFound):
-        await url_service.deactivate_url(repo, SecretKey("NOPE1_MISSING"))
+        await url_service.deactivate_url(repo, missing_key)
 
 
 # endregion

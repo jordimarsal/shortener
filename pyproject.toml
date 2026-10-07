@@ -7,6 +7,19 @@ asyncio_mode = "auto"
 # repo root on sys.path so `pytest` (console script, no cwd insertion)
 # resolves the shortener_app package the same way `python -m pytest` does
 pythonpath = ["."]
+# coverage on every run: SonarQube imports coverage.xml (sonar-project.properties)
+addopts = "--cov --cov-report=xml --cov-report=term"
+
+[tool.coverage.run]
+# source="." keeps report filenames relative to the repo root, which is what
+# SonarQube's coverage importer expects; tests and the venv are not code under test.
+source = ["."]
+omit = ["tests/*", "venv/*"]
+relative_files = true
+branch = true
+
+[tool.coverage.report]
+show_missing = false
 
 [tool.mypy]
 strict = true

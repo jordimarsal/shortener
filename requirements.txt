@@ -1,23 +1,23 @@
 # web framework to build the api
-fastapi==0.141.1
+fastapi==0.162.0
 # ASGI Asynchronous Server Gateway Interface. Web server
 uvicorn==0.54.0
 # ORM Object Relational Mapper ([asyncio] extra pulls greenlet, required by AsyncSession)
-sqlalchemy[asyncio]==2.1.1
+sqlalchemy[asyncio]==2.1.6
 # async driver for SQLite
 aiosqlite==0.22.1
 # pydantic settings management (env vars + .env file)
-pydantic-settings==2.15.0
+pydantic-settings==2.16.1
 # validate data
-validators==0.35.0
+validators==0.36.0
 
 # dev / tests
 pytest==9.1.1
 pytest-asyncio==1.4.0
 pytest-cov==7.1.0
-httpx2==2.13.1
-mypy==2.3.1
-black==26.5.1
-ruff==0.16.9
+httpx2==2.16.0
+mypy==2.4.0
+black==26.10.1
+ruff==0.17.2
 
 # pip install -r requirements.txt

@@ -1,0 +1,4 @@
+# atalaia: accions del dashboard (allowlist)
+port: 8000
+start: uv run uvicorn shortener_app.main:app
+stop: fuser -k 8000/tcp
